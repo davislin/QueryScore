@@ -164,20 +164,27 @@ namespace ScoreEditer
 
         private void btnImport_Click(object sender, EventArgs e)
         {
-            DataRow newRow = dataSet.Tables["pointlog"].NewRow();
-            newRow["id"] = dataSet.Tables["pointlog"].Rows.Count + 1;
-            newRow["number"] = Int32.Parse(tbxNumber.Text);
-            newRow["stu_class"] = labClass.Text;
-            newRow["name"] = labName.Text;
-            newRow["date"] = dtPDate.Value;
-            newRow["point"] = nmUDPoint.Value;
-            newRow["pt_case"] = tbxPT_case.Text;
-            dataSet.Tables["pointlog"].Rows.Add(newRow);
-            dataAdapter2.Update(dataSet, "pointlog");
-            dataSet.AcceptChanges();
-            tbxNumber.Focus();
-            tbxNumber.SelectAll();
-            tssMessage.Text = "好讚點數資料已新增完成!";
+            if (tbxNumber.Text != "")
+            {
+                DataRow newRow = dataSet.Tables["pointlog"].NewRow();
+                newRow["id"] = dataSet.Tables["pointlog"].Rows.Count + 1;
+                newRow["number"] = Int32.Parse(tbxNumber.Text);
+                newRow["stu_class"] = labClass.Text;
+                newRow["name"] = labName.Text;
+                newRow["date"] = dtPDate.Value;
+                newRow["point"] = nmUDPoint.Value;
+                newRow["pt_case"] = tbxPT_case.Text;
+                dataSet.Tables["pointlog"].Rows.Add(newRow);
+                dataAdapter2.Update(dataSet, "pointlog");
+                dataSet.AcceptChanges();
+                tbxNumber.Focus();
+                tbxNumber.SelectAll();
+                tssMessage.Text = "好讚點數資料已新增完成!";
+            }
+            else
+            {
+                MessageBox.Show("沒有輸入任何資料");
+            }
         }
 
         private void textBox1_Leave(object sender, EventArgs e)

@@ -5,10 +5,10 @@ using System.Runtime.InteropServices;
 // 組件的一般資訊是由下列的屬性集控制。
 // 變更這些屬性的值即可修改組件的相關
 // 資訊。
-[assembly: AssemblyTitle("QueryScore")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("好讚點數查詢系統")]
+[assembly: AssemblyDescription("擔任家長會財務長期間免費為四德國小撰寫")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
+[assembly: AssemblyCompany("林宜頡")]
 [assembly: AssemblyProduct("QueryScore")]
 [assembly: AssemblyCopyright("Copyright ©  2017")]
 [assembly: AssemblyTrademark("")]

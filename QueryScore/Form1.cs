@@ -19,6 +19,8 @@ namespace QueryScore
         private SQLiteConnection sqlite_conn;
         private SQLiteDataAdapter dta1;
         private SQLiteDataAdapter dta2;
+        private bool IsNeedClear = false;
+        private int timeLeft = 0;
         public Form1()
         {
             //this.WindowState = FormWindowState.Normal;
@@ -135,26 +137,45 @@ namespace QueryScore
 
         private void button1_Click(object sender, EventArgs e)
         {
-            GetNewData();
-
-            dataGridView2.DataSource = dataSet.Tables["pointlog"];
-            dataGridView2.Columns["date"].HeaderText = "日期";
-            dataGridView2.Columns["point"].HeaderText = "變動點數";
-            dataGridView2.Columns["pt_case"].HeaderText = "獎勵或兌換說明";
-            //計算總點數
-            if(dataSet.Tables["student"].Rows.Count > 0)
+            if (tbxNM.Text != "")
             {
-                labClass.Text = dataSet.Tables["student"].Rows[0]["CLASS"].ToString();
-                labName.Text = dataSet.Tables["student"].Rows[0]["NAME"].ToString();
-                labPoint.Text = dataSet.Tables["student"].Rows[0]["POINT"].ToString();
+                try
+                {
+                    GetNewData();
+
+                    dataGridView2.DataSource = dataSet.Tables["pointlog"];
+                    dataGridView2.Columns["date"].HeaderText = "日期";
+                    dataGridView2.Columns["point"].HeaderText = "變動點數";
+                    dataGridView2.Columns["pt_case"].HeaderText = "獎勵或兌換說明";
+                    //計算總點數
+                    if (dataSet.Tables["student"].Rows.Count > 0)
+                    {
+                        labClass.Text = dataSet.Tables["student"].Rows[0]["CLASS"].ToString();
+                        labName.Text = dataSet.Tables["student"].Rows[0]["NAME"].ToString();
+                        labPoint.Text = dataSet.Tables["student"].Rows[0]["POINT"].ToString();
+                        IsNeedClear = true;
+                        timer1.Start();
+                        timeLeft = 10;
+                        //labMessage.Text = "查詢完成，資料將在30秒後清除!!";
+                    }
+                    else
+                    {
+                        ClearAll();
+
+                    }
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.ToString());
+                }
             }
             else
             {
-                labClass.Text ="查無資料";
-                labName.Text = ""; 
-                labPoint.Text = "";
-            }
+                ClearAll();
 
+            }
+            tbxNM.Focus();
+            tbxNM.SelectAll();
         }
 
         private void tbxNM_KeyPress(object sender, KeyPressEventArgs e)
@@ -191,6 +212,38 @@ namespace QueryScore
             //this.ControlBox = true;
             //this.WindowState = FormWindowState.Maximized;
             //this.FormBorderStyle = FormBorderStyle.FixedSingle;
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            ClearAll();
+            labMessage.Text = "查詢資料已清除!!";
+        }
+
+        private void ClearAll()
+        {
+            labClass.Text = "";
+            labName.Text = "";
+            labPoint.Text = "";
+            dataSet.Clear();
+            IsNeedClear = false;
+            tbxNM.Focus();
+            tbxNM.SelectAll();
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            if (timeLeft > 0 && IsNeedClear)
+            {
+                timeLeft = timeLeft - 1;
+                labMessage.Text = string.Format("請注意 {0} 秒後將自動清除資料...", timeLeft);
+            }
+            else
+            {
+                /* 倒數時間到執行 */
+                ClearAll();
+                labMessage.Text = "查詢資料已清除!!";
+            }
         }
     }
 }
