@@ -155,7 +155,7 @@ namespace QueryScore
                         labPoint.Text = dataSet.Tables["student"].Rows[0]["POINT"].ToString();
                         IsNeedClear = true;
                         timer1.Start();
-                        timeLeft = 10;
+                        timeLeft = 30;
                         //labMessage.Text = "查詢完成，資料將在30秒後清除!!";
                     }
                     else
@@ -228,21 +228,24 @@ namespace QueryScore
             dataSet.Clear();
             IsNeedClear = false;
             tbxNM.Focus();
-            tbxNM.SelectAll();
+            tbxNM.Text = "";
         }
 
         private void timer1_Tick(object sender, EventArgs e)
         {
-            if (timeLeft > 0 && IsNeedClear)
+            if (IsNeedClear)
             {
-                timeLeft = timeLeft - 1;
-                labMessage.Text = string.Format("請注意 {0} 秒後將自動清除資料...", timeLeft);
-            }
-            else
-            {
-                /* 倒數時間到執行 */
-                ClearAll();
-                labMessage.Text = "查詢資料已清除!!";
+                if (timeLeft > 0)
+                {
+                    timeLeft = timeLeft - 1;
+                    labMessage.Text = string.Format("請注意 {0} 秒後將自動清除資料...", timeLeft);
+                }
+                else
+                {
+                    /* 倒數時間到執行 */
+                    ClearAll();
+                    labMessage.Text = "查詢資料已清除!!";
+                }
             }
         }
     }
