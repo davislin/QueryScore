@@ -102,19 +102,19 @@ namespace QueryScore
 
         }
 
-        private void GetNewData()
+        private void GetNewData(string nm)
         {
             // Open
             sqlite_conn.Open();
 
             dataSet.Clear();
 
-            dta1 = new SQLiteDataAdapter("select class.name AS CLASS, IFNULL(student.name,'查無此人')NAME, IFNULL(SUM(pointlog.point),0)POINT FROM student left outer join pointlog ON student.number = pointlog.number left outer join class ON student.stu_class = class.number Where student.number == " + tbxNM.Text, sqlite_conn);
+            dta1 = new SQLiteDataAdapter("select class.name AS CLASS, IFNULL(student.name,'查無此人')NAME, IFNULL(SUM(pointlog.point),0)POINT FROM student left outer join pointlog ON student.number = pointlog.number left outer join class ON student.stu_class = class.number Where student.number == " + nm, sqlite_conn);
 
             dta1.Fill(dataSet, "student");
             //// 執行查詢塞入 sqlite_datareader
 
-            dta2 = new SQLiteDataAdapter("select date,point,pt_case FROM pointlog Where pointlog.number == " + tbxNM.Text, sqlite_conn);
+            dta2 = new SQLiteDataAdapter("select date,point,pt_case FROM pointlog Where pointlog.number == " + nm, sqlite_conn);
 
             dta2.Fill(dataSet, "pointlog");
 
@@ -146,7 +146,7 @@ namespace QueryScore
                 {
                     try
                     {
-                        GetNewData();
+                        GetNewData(m.Value);
 
                         dataGridView2.DataSource = dataSet.Tables["pointlog"];
                         dataGridView2.Columns["date"].HeaderText = "日期";
