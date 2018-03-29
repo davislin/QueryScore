@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Data.SQLite;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 
 namespace QueryScore
 {
@@ -139,34 +140,46 @@ namespace QueryScore
         {
             if (tbxNM.Text != "")
             {
-                try
+                Regex r = new Regex(@"\d\d\d\d");
+                Match m = r.Match(tbxNM.Text);
+                if (m.Success)
                 {
-                    GetNewData();
-
-                    dataGridView2.DataSource = dataSet.Tables["pointlog"];
-                    dataGridView2.Columns["date"].HeaderText = "日期";
-                    dataGridView2.Columns["point"].HeaderText = "變動點數";
-                    dataGridView2.Columns["pt_case"].HeaderText = "獎勵或兌換說明";
-                    //計算總點數
-                    if (dataSet.Tables["student"].Rows.Count > 0)
+                    try
                     {
-                        labClass.Text = dataSet.Tables["student"].Rows[0]["CLASS"].ToString();
-                        labName.Text = dataSet.Tables["student"].Rows[0]["NAME"].ToString();
-                        labPoint.Text = dataSet.Tables["student"].Rows[0]["POINT"].ToString();
-                        IsNeedClear = true;
-                        timer1.Start();
-                        timeLeft = 30;
-                        //labMessage.Text = "查詢完成，資料將在30秒後清除!!";
+                        GetNewData();
+
+                        dataGridView2.DataSource = dataSet.Tables["pointlog"];
+                        dataGridView2.Columns["date"].HeaderText = "日期";
+                        dataGridView2.Columns["point"].HeaderText = "變動點數";
+                        dataGridView2.Columns["pt_case"].HeaderText = "獎勵或兌換說明";
+                        //計算總點數
+                        if (dataSet.Tables["student"].Rows.Count > 0)
+                        {
+                            labClass.Text = dataSet.Tables["student"].Rows[0]["CLASS"].ToString();
+                            labName.Text = dataSet.Tables["student"].Rows[0]["NAME"].ToString();
+                            labPoint.Text = dataSet.Tables["student"].Rows[0]["POINT"].ToString();
+                            IsNeedClear = true;
+                            timer1.Start();
+                            timeLeft = 30;
+                            //labMessage.Text = "查詢完成，資料將在30秒後清除!!";
+                        }
+                        else
+                        {
+                            ClearAll();
+
+                        }
                     }
-                    else
+                    catch(Exception ex)
                     {
-                        ClearAll();
-
+                        MessageBox.Show(ex.ToString());
                     }
                 }
-                catch(Exception ex)
+                else
                 {
-                    MessageBox.Show(ex.ToString());
+                    if(MessageBox.Show("輸入錯誤請重新輸入")== DialogResult.OK)
+                    {
+
+                    }
                 }
             }
             else
