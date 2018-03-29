@@ -138,7 +138,7 @@ namespace QueryScore
 
         private void button1_Click(object sender, EventArgs e)
         {
-            if (tbxNM.Text != "")
+            if (tbxNM.Text.Length == 4)
             {
                 Regex r = new Regex(@"\d\d\d\d");
                 Match m = r.Match(tbxNM.Text);
@@ -184,8 +184,11 @@ namespace QueryScore
             }
             else
             {
-                ClearAll();
+                if (MessageBox.Show("輸入錯誤請重新輸入") == DialogResult.OK)
+                {
 
+                }
+                ClearAll();
             }
             tbxNM.Focus();
             tbxNM.SelectAll();
