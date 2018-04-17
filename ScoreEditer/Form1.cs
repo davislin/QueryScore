@@ -10,6 +10,8 @@ using System.Windows.Forms;
 using System.Data.SQLite;
 using System.Data.OleDb;
 using System.IO;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace ScoreEditer
 {
@@ -34,12 +36,14 @@ namespace ScoreEditer
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            Text = @"好讚點數管理系統 v" + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
 
             GetNewData();
         }
 
         private void GetNewData()
         {
+            dataSet.Clear();
             //MySqlCommand command = conn.CreateCommand();
             sqlite_conn.Open();
 
@@ -167,7 +171,7 @@ namespace ScoreEditer
             if (tbxNumber.Text != "")
             {
                 DataRow newRow = dataSet.Tables["pointlog"].NewRow();
-                newRow["id"] = dataSet.Tables["pointlog"].Rows.Count + 1;
+                //newRow["id"] = dataSet.Tables["pointlog"].Rows.Count + 1;
                 newRow["number"] = Int32.Parse(tbxNumber.Text);
                 newRow["stu_class"] = labClass.Text;
                 newRow["name"] = labName.Text;
@@ -548,7 +552,7 @@ namespace ScoreEditer
             for (int i = 0; i < SSRows.Length; i++)
             {
                 DataRow newRow = dataSet.Tables["pointlog"].NewRow();
-                newRow["id"] = dataSet.Tables["pointlog"].Rows.Count + 1;
+                //newRow["id"] = dataSet.Tables["pointlog"].Rows.Count + 1;
                 newRow["number"] = SSRows[i]["學號"];
                 newRow["stu_class"] = cbxClass.SelectedItem;
                 newRow["name"] = SSRows[i]["姓名"];

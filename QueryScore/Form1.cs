@@ -11,6 +11,8 @@ using System.Windows.Forms;
 using System.Data.SQLite;
 using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
+using System.Diagnostics;
+using System.Reflection;
 
 namespace QueryScore
 {
@@ -32,6 +34,8 @@ namespace QueryScore
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            Text = @"好讚點數查詢系統 v" + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
+
             sqlite_conn = new SQLiteConnection("Data source=student.db");
 
             //String cmdText = "SELECT name, nmber FROM student_point.class";
