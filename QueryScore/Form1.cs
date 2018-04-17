@@ -13,6 +13,7 @@ using System.Runtime.InteropServices;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Reflection;
+using System.IO;
 
 namespace QueryScore
 {
@@ -36,8 +37,15 @@ namespace QueryScore
         {
             Text = @"好讚點數查詢系統 v" + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).FileVersion;
 
-            sqlite_conn = new SQLiteConnection("Data source=student.db");
-
+            if (File.Exists("student.db"))
+            {
+                sqlite_conn = new SQLiteConnection("Data source=student.db");
+            }
+            else
+            {
+                MessageBox.Show("找不到資料庫檔案，即將關閉程式，請確認同目錄下有放入資料庫檔案");
+                Close();
+            }
             //String cmdText = "SELECT name, nmber FROM student_point.class";
             //MySqlCommand cmd = new MySqlCommand(cmdText, conn);
             //MySqlDataReader reader = cmd.ExecuteReader(); //execure the reader
