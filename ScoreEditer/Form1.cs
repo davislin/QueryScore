@@ -30,7 +30,29 @@ namespace ScoreEditer
         public Form1()
         {
             InitializeComponent();
-            sqlite_conn = new SQLiteConnection("Data source=student.db");
+            if (File.Exists("student.db"))
+            {
+                sqlite_conn = new SQLiteConnection("Data source=student.db");
+            }
+            else
+            {
+                MessageBox.Show("歡迎使用好讚點數系統!!\r\n由於您目前沒有任何資料所以自動開啟一個新的資料庫");
+                SQLiteConnection.CreateFile("student.db");
+                sqlite_conn = new SQLiteConnection("Data source=student.db");
+                sqlite_conn.Open();
+
+                string sql = "CREATE TABLE class ( `number` INTEGER, `name` TEXT, PRIMARY KEY(`number`) )";
+                SQLiteCommand command = new SQLiteCommand(sql, sqlite_conn);
+                command.ExecuteNonQuery();
+                string sql1 = "CREATE TABLE pointlog ( `id` INTEGER, `number` INTEGER, `stu_class` TEXT, `name` TEXT, `date` TEXT, `point` INTEGER, `pt_case` TEXT, PRIMARY KEY(`id`) )";
+                SQLiteCommand command1 = new SQLiteCommand(sql1, sqlite_conn);
+                command1.ExecuteNonQuery();
+                string sql2 = "CREATE TABLE student ( `number` INTEGER, `stu_class` INTEGER, `name` TEXT, PRIMARY KEY(`number`) )";
+                SQLiteCommand command2 = new SQLiteCommand(sql2, sqlite_conn);
+                command2.ExecuteNonQuery();
+
+                sqlite_conn.Close();
+            }
 
         }
 
@@ -67,7 +89,7 @@ namespace ScoreEditer
             {
                 cbxClass.Items.Add(dataSet.Tables["class"].Rows[i]["name"]);
             }
-            cbxClass.SelectedIndex = 0;
+            cbxClass.SelectedIndex = dataSet.Tables["class"].Rows.Count > 0 ? 0 : -1;
 
             //##########點數紀錄資料
             dataAdapter2 = new SQLiteDataAdapter("SELECT * FROM pointlog order by id DESC", sqlite_conn);
@@ -358,7 +380,7 @@ namespace ScoreEditer
 
         private void button8_Click(object sender, EventArgs e)
         {
-            dataSet.Clear();
+            //dataSet.Clear();
             GetNewData();
         }
 
