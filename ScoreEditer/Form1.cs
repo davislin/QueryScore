@@ -132,7 +132,7 @@ namespace ScoreEditer
             Builder3 = new SQLiteCommandBuilder(dataAdapter3);
 
             //##########統整資料
-            dataAdapter4 = new SQLiteDataAdapter("select class.name AS CLASS, student.number,student.name, IFNULL(SUM(pointlog.point),0)POINT FROM student left outer join pointlog ON student.name = pointlog.name left outer join class ON student.stu_class = class.number group by student.name ORDER BY student.number", sqlite_conn);
+            dataAdapter4 = new SQLiteDataAdapter("select class.name AS CLASS, student.number,student.name, IFNULL(SUM(pointlog.point),0)POINT FROM student left outer join pointlog ON student.number = pointlog.number left outer join class ON student.stu_class = class.number group by student.number ORDER BY student.number", sqlite_conn);
             dataAdapter4.Fill(dataSet, "Total");
 
             //指定資料來源
